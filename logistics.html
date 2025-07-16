@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Logistics - DefendChain</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            font-size: 1.5rem;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-item:hover::before {
+            left: 100%;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .connect-wallet {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+            animation: pulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.3); }
+            100% { box-shadow: 0 0 30px rgba(255, 107, 107, 0.5); }
+        }
+
+        .connect-wallet:hover {
+            background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        /* Main content */
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.4s both;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(45deg, #45a049, #4CAF50);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Status indicators */
+        .status-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .status-indicator {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .status-secure {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
+        }
+
+        .status-blockchain {
+            background: rgba(156, 39, 176, 0.2);
+            color: #9C27B0;
+        }
+
+        .status-encrypted {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FF9800;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .nav-bar {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Custom select styling */
+        .form-select option {
+            background: #333;
+            color: #fff;
+        }
+
+        /* Input focus effects */
+        .form-input:focus, .form-select:focus {
+            animation: inputGlow 0.5s ease-in-out;
+        }
+
+        @keyframes inputGlow {
+            0% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
+            100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
+        }
+
+        /* Progress indicator */
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-step {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active {
+            background: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background particles -->
+    <div class="particles" id="particles"></div>
+
+    <div class="header">
+        <div class="container">
+            <div class="logo">DefendChain</div>
+            <nav class="nav-bar">
+                <a href="index.html" class="nav-item">Dashboard</a>
+                <a href="logistics.html" class="nav-item active">Add Logistics</a>
+                <a href="view.html" class="nav-item">View Logistics</a>
+                
+                <a href="#" class="nav-item connect-wallet">Connect Wallet</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="form-container">
+            <h1 class="page-title">Add New Logistics</h1>
+            <p class="page-subtitle">Create a new supply chain entry with blockchain-verified tracking</p>
+
+            <div class="status-indicators">
+                <div class="status-indicator status-secure">🔒 Secure Channel</div>
+                <div class="status-indicator status-blockchain">⛓️ Blockchain Ready</div>
+                <div class="status-indicator status-encrypted">🛡️ Encrypted</div>
+            </div>
+
+            <div class="progress-indicator">
+                <div class="progress-step active"></div>
+                <div class="progress-step"></div>
+                <div class="progress-step"></div>
+                <div class="progress-step"></div>
+            </div>
+
+            <form class="form-card" id="logisticsForm">
+                <div class="form-group">
+                    <label for="item">Item Description</label>
+                    <input type="text" id="item" class="form-input" placeholder="e.g. Night Vision Goggles" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="type">Category Type</label>
+                    <select id="type" class="form-select" required>
+                        <option value="">Select Category</option>
+                        <option value="weapons">🔫 Weapons</option>
+                        <option value="medical">🏥 Medical</option>
+                        <option value="machinery">⚙️ Machinery</option>
+                        <option value="electronics">💻 Electronics</option>
+                        <option value="supplies">📦 Supplies</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="origin">Origin Location</label>
+                        <input type="text" id="origin" class="form-input" placeholder="e.g. Mumbai, India" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">Destination</label>
+                        <input type="text" id="destination" class="form-input" placeholder="e.g. Delhi, India" required />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" id="quantity" class="form-input" placeholder="e.g. 50" min="1" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="priority">Priority Level</label>
+                        <select id="priority" class="form-select" required>
+                            <option value="">Select Priority</option>
+                            <option value="low">🟢 Low</option>
+                            <option value="medium">🟡 Medium</option>
+                            <option value="high">🟠 High</option>
+                            <option value="critical">🔴 Critical</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="delivery-date">Expected Delivery Date</label>
+                    <input type="date" id="delivery-date" class="form-input" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Additional Notes</label>
+                    <input type="text" id="notes" class="form-input" placeholder="Special handling instructions, security requirements, etc." />
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    🚀 Create Logistics Entry
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Form validation and progress tracking
+        const form = document.getElementById('logisticsForm');
+        const progressSteps = document.querySelectorAll('.progress-step');
+        const inputs = form.querySelectorAll('.form-input, .form-select');
+
+        // Update progress indicator
+        function updateProgress() {
+            const filledInputs = Array.from(inputs).filter(input => input.value.trim() !== '');
+            const progress = Math.floor((filledInputs.length / inputs.length) * 4);
+            
+            progressSteps.forEach((step, index) => {
+                if (index < progress) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+        }
+
+        // Add event listeners to inputs
+        inputs.forEach(input => {
+            input.addEventListener('input', updateProgress);
+            input.addEventListener('change', updateProgress);
+        });
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Add loading state
+            const submitBtn = form.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '🔄 Processing...';
+            submitBtn.style.background = 'linear-gradient(45deg, #ff9800, #f57c00)';
+            
+            // Simulate processing
+            setTimeout(() => {
+                submitBtn.textContent = '✅ Entry Created Successfully!';
+                submitBtn.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
+                
+                // Reset after 3 seconds
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    form.reset();
+                    updateProgress();
+                }, 3000);
+            }, 2000);
+        });
+
+        // Add hover effects to form elements
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Initialize particles
+        createParticles();
+
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('delivery-date').setAttribute('min', today);
+    </script>
+</body>
+</html>
