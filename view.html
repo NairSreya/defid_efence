@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>View Shipments - DefendChain</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+    
+    .glass-header {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-transit {
+      background: rgba(59, 130, 246, 0.2);
+      color: #3b82f6;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    
+    .status-delivered {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    
+    .status-pending {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+    }
+    
+    .nav-button {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .nav-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .nav-button.active {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    
+    .connect-wallet {
+      background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+      border: none;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    }
+    
+    .connect-wallet:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="min-h-screen">
+    <!-- Header -->
+    <header class="p-6">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div href = "index.html" class="logo">DefendChain</div>
+        
+        <nav class="flex items-center space-x-4">
+        <a href="index.html" class="nav-button active px-6 py-2 rounded-full text-white font-medium">Dashboard</a>
+        <a href="logistics.html" class="nav-button px-6 py-2 rounded-full text-white font-medium">Add Logistics</a>
+        <a href="view.html" class="nav-button px-6 py-2 rounded-full text-white font-medium">View Logistics</a>
+        <a href="connect-wallet.html" class="connect-wallet px-6 py-2 rounded-full text-white font-medium">Connect Wallet</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 pb-6">
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold text-white mb-2">All Shipments</h2>
+        <p class="text-purple-100">Monitor and track all logistics operations in real-time</p>
+      </div>
+
+      <!-- Shipments Table -->
+      <div class="glass-card rounded-2xl overflow-hidden">
+      <div class="glass-header px-6 py-4">
+        <h3 class="text-lg font-semibold text-white">Active Shipments</h3>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="min-w-full">
+          <thead>
+            <tr class="border-b border-white/10">
+              <th class="px-6 py-4 text-left text-sm font-medium text-purple-100 uppercase tracking-wider">Shipment ID</th>
+              <th class="px-6 py-4 text-left text-sm font-medium text-purple-100 uppercase tracking-wider">Item Description</th>
+              <th class="px-6 py-4 text-left text-sm font-medium text-purple-100 uppercase tracking-wider">Origin</th>
+              <th class="px-6 py-4 text-left text-sm font-medium text-purple-100 uppercase tracking-wider">Destination</th>
+              <th class="px-6 py-4 text-left text-sm font-medium text-purple-100 uppercase tracking-wider">Status</th>
+              <th class="px-6 py-4 text-left text-sm font-medium text-purple-100 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/10">
+            <tr class="hover:bg-white/5 transition-colors duration-200">
+              <td class="px-6 py-4 text-sm font-medium text-white">IN-2025-001</td>
+              <td class="px-6 py-4 text-sm text-purple-100">INSAS Rifles (300 units)</td>
+              <td class="px-6 py-4 text-sm text-purple-100">Jalandhar Cantonment</td>
+              <td class="px-6 py-4 text-sm text-purple-100">Tezpur AFS, Assam</td>
+              <td class="px-6 py-4 text-sm">
+                <span class="status-badge status-transit">In Transit</span>
+              </td>
+              <td class="px-6 py-4 text-sm">
+                <button class="text-blue-400 hover:text-blue-300 font-medium">Track</button>
+              </td>
+            </tr>
+            
+            <tr class="hover:bg-white/5 transition-colors duration-200">
+              <td class="px-6 py-4 text-sm font-medium text-white">IN-2025-002</td>
+              <td class="px-6 py-4 text-sm text-purple-100">Medical Kits</td>
+              <td class="px-6 py-4 text-sm text-purple-100">Command Hospital, Pune</td>
+              <td class="px-6 py-4 text-sm text-purple-100">Military Hospital, Leh</td>
+              <td class="px-6 py-4 text-sm">
+                <span class="status-badge status-delivered">Delivered</span>
+              </td>
+              <td class="px-6 py-4 text-sm">
+                <button class="text-blue-400 hover:text-blue-300 font-medium">View</button>
+              </td>
+            </tr>
+            
+            <tr class="hover:bg-white/5 transition-colors duration-200">
+              <td class="px-6 py-4 text-sm font-medium text-white">IN-2025-003</td>
+              <td class="px-6 py-4 text-sm text-purple-100">Radio Equipment</td>
+              <td class="px-6 py-4 text-sm text-purple-100">Signals Depot, Delhi</td>
+              <td class="px-6 py-4 text-sm text-purple-100">Eastern Command HQ, Kolkata</td>
+              <td class="px-6 py-4 text-sm">
+                <span class="status-badge status-pending">Pending</span>
+              </td>
+              <td class="px-6 py-4 text-sm">
+                <button class="text-blue-400 hover:text-blue-300 font-medium">Track</button>
+              </td>
+            </tr>
+            
+            <tr class="hover:bg-white/5 transition-colors duration-200">
+              <td class="px-6 py-4 text-sm font-medium text-white">IN-2025-004</td>
+              <td class="px-6 py-4 text-sm text-purple-100">Ammunition (7.62mm)</td>
+              <td class="px-6 py-4 text-sm text-purple-100">Ordnance Factory, Nagpur</td>
+              <td class="px-6 py-4 text-sm text-purple-100">Siachen Base Camp</td>
+              <td class="px-6 py-4 text-sm">
+                <span class="status-badge status-transit">In Transit</span>
+              </td>
+              <td class="px-6 py-4 text-sm">
+                <button class="text-blue-400 hover:text-blue-300 font-medium">Track</button>
+              </td>
+            </tr>
+            
+            <tr class="hover:bg-white/5 transition-colors duration-200">
+              <td class="px-6 py-4 text-sm font-medium text-white">IN-2025-005</td>
+              <td class="px-6 py-4 text-sm text-purple-100">Bulletproof Vests</td>
+              <td class="px-6 py-4 text-sm text-purple-100">DRDO Facility, Hyderabad</td>
+              <td class="px-6 py-4 text-sm text-purple-100">Northern Command HQ, Udhampur</td>
+              <td class="px-6 py-4 text-sm">
+                <span class="status-badge status-delivered">Delivered</span>
+              </td>
+              <td class="px-6 py-4 text-sm">
+                <button class="text-blue-400 hover:text-blue-300 font-medium">View</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+        
+        <!-- Pagination -->
+        <div class="glass-header px-6 py-4 flex items-center justify-between">
+          <div class="text-sm text-purple-100">
+            Showing 1-5 of 1,247 shipments
+          </div>
+          <div class="flex space-x-2">
+            <button class="nav-button px-3 py-1 rounded-lg text-white text-sm">Previous</button>
+            <button class="nav-button active px-3 py-1 rounded-lg text-white text-sm">1</button>
+            <button class="nav-button px-3 py-1 rounded-lg text-white text-sm">2</button>
+            <button class="nav-button px-3 py-1 rounded-lg text-white text-sm">3</button>
+            <button class="nav-button px-3 py-1 rounded-lg text-white text-sm">Next</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
